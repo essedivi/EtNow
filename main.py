@@ -2,6 +2,7 @@ import openmeteo_requests
 import requests_cache
 import pandas as pd
 from retry_requests import retry
+import csv
 
 # Setup the Open-Meteo API client with cache and retry on error
 cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)
@@ -11,24 +12,31 @@ openmeteo = openmeteo_requests.Client(session = retry_session)
 # Make sure all required weather variables are listed here
 # The order of variables in hourly or daily is important to assign them correctly below
 url = "https://api.open-meteo.com/v1/forecast"
-params = {
+tp_prmtr = ['latitude','longitude','current','hourly','daily']
+params = dict(tp_prmtr[0]="40.85",tp_prmtr[1]="14.26",tp_prmtr[2]="snowfall",tp_prmtr[2]="snowfall",tp_prmtr[3]="temperature_2m",tp_prmtr[4]="temperature_2m"",tp_prmtr[5]="snowfall_sum")
+#params = {
   #All params are show  at https://open-meteo.com/en/docs in Api Documentation. exaples below 
 	#"latitude": 52.52,
 	#"longitude": 13.41,
 	#"current": "snowfall",
 	#"hourly": "temperature_2m",
 	#"daily": "snowfall_sum"
-}
+#}
 responses = openmeteo.weather_api(url, params=params) #All parameters that you have request are stored in responses variable
 
 #Exaples of manege responses variable for print inside parameters
 # Process first location. Add a for-loop for multiple locations or weather models
-#response = responses[0]
+response = responses[0]
 #print(f"Coordinates {response.Latitude()}°N {response.Longitude()}°E")
 #print(f"Elevation {response.Elevation()} m asl")
 #print(f"Timezone {response.Timezone()} {response.TimezoneAbbreviation()}")
 #print(f"Timezone difference to GMT+0 {response.UtcOffsetSeconds()} s")
-
+with open('sample.csv', 'a', newline='') as csvfile:
+    #fieldnames = ['first_name', 'last_name']
+    writer = csv.DictWriter(csvfile, fieldnames=tp_prmtr)
+    writer.writeheader()
+    writer.writerow({'latitude': 'str(response.Latitude())"°N"', 'longitude': 'str(response.Latitude())"°E"','longitude': 'str(response.Latitude())"°E"','current': 'str(current.Variables(0).Value())',
+		    'hourly': 'xxx','daily':'xxx'})
 # Current values. The order of variables needs to be the same as requested.
 #current = response.Current()
 #current_snowfall = current.Variables(0).Value()
