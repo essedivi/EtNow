@@ -12,16 +12,14 @@ openmeteo = openmeteo_requests.Client(session = retry_session)
 # Make sure all required weather variables are listed here
 # The order of variables in hourly or daily is important to assign them correctly below
 url = "https://api.open-meteo.com/v1/forecast"
-tp_prmtr = ['latitude','longitude','current','hourly','daily']
-params = dict(tp_prmtr[0]="40.85",tp_prmtr[1]="14.26",tp_prmtr[2]="snowfall",tp_prmtr[2]="snowfall",tp_prmtr[3]="temperature_2m",tp_prmtr[4]="temperature_2m"",tp_prmtr[5]="snowfall_sum")
-#params = {
+prmtr = [40.85,14.26,"snowfall","temperature_2m","snowfall_sum"]
+params = {
   #All params are show  at https://open-meteo.com/en/docs in Api Documentation. exaples below 
-	#"latitude": 52.52,
-	#"longitude": 13.41,
-	#"current": "snowfall",
-	#"hourly": "temperature_2m",
-	#"daily": "snowfall_sum"
-#}
+	"latitude":tp_prmtr[0],
+	"longitude":tp_prmtr[1],
+	"current":tp_prmtr[2],
+	"hourly":tp_prmtr[3],
+	"daily":tp_prmtr[4],}
 responses = openmeteo.weather_api(url, params=params) #All parameters that you have request are stored in responses variable
 
 #Exaples of manege responses variable for print inside parameters
